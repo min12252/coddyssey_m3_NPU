@@ -245,11 +245,17 @@ def mode2():
     print("전체 패턴 수:", total_count)
     print("PASS:", pass_count)
     print("FAIL:", fail_count)
-    print("크기별 평균 연산 시간:")
-    for size, times in performance.items():
+
+
+    ## 성능 분석 표
+    print("\n[성능 분석]")
+    print("크기\t평균 시간(ms)\t연산 횟수(N²)")
+
+    for size, times in sorted(performance.items()):
         average_time = sum(times) / len(times)
-        print(f"{size}×{size}: {average_time:.6f} ms")
-        
+        operations = size ** 2
+
+        print(f"{size}×{size}\t{average_time:.6f}\t{operations}")
 
 ### 메인 실행 부분 ###
 mode = input("모드를 선택하세요 (1 또는 2): ")
