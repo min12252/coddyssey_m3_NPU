@@ -230,10 +230,14 @@ def mode2():
             print("예상:", expected)
             print(f"연산 평균 시간 (N²{size*size}): Cross={average_time_cross:.6f}ms, X={average_time_x:.6f}ms")
             print(f"점수: Cross={score_cross}, X={score_x}")
+            
             print("판정:", result)
-            reason = ''
-            if status == 'FAIL':
+            if result == 'UNDECIDED':
                 reason = '(동점규칙)'
+            elif status == "FAIL" and result != "UNDECIDED":
+                reason = '(unexpected)'
+            else:
+                reason = ''
             print("결과:", status, reason)
             print("--------------------")
 

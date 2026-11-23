@@ -48,9 +48,9 @@ python3 main.py
   - 실제 판정과 예상 정답이 같으면 PASS, 다르면 FAIL
 
 ## 실행 결과
-[mod1]('log/mod1.txt')
+[mod1](log/mod1.txt)
 
-[mod2]('log/mod2.txt')
+[mod2](log/mod2.txt)
 
 ## 실패 원인 및 시간 복잡도 분석
 
