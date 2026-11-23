@@ -25,10 +25,7 @@ def is_same_size(matrix_a, matrix_b):
 
 
 # MAC 연산 수행
-def mac(pattern, filter_data):
-    ## 입력 배열과 필터 배열이 비어있는지 확인
-    if not pattern or not filter_data:
-        raise ValueError("빈 배열은 사용할 수 없습니다.")
+def mac(pattern=[], filter_data=[]):
 
     ## 배열 크기 확인
     if not is_same_size(pattern, filter_data):
@@ -115,15 +112,16 @@ def normalize_label(label):
 
 # 모드 1: 사용자 직접 입력
 def mode1():
+    number = 3
     ## 사용자 입력 받기
     print("패턴을 입력하세요.")
-    pattern = input_matrix(3)
+    pattern = input_matrix(number)
 
     print("필터 A를 입력하세요.")
-    filter_a = input_matrix(3)
+    filter_a = input_matrix(number)
 
     print("필터 B를 입력하세요.")
-    filter_b = input_matrix(3)
+    filter_b = input_matrix(number)
 
     ## MAC 연산 수행 및 시간 측정
     score_a = None
@@ -139,8 +137,8 @@ def mode1():
         ### 연산 시간 측정
         average_time_a = measure_time(pattern, filter_a)
         average_time_b = measure_time(pattern, filter_b)
-        print("score_a 평균 연산 시간:", average_time_a, "ms")
-        print("score_b 평균 연산 시간:", average_time_b, "ms")
+        print(f"score_a 연산 평균 시간 (10회): {average_time_a} ms, N²:{number*number}")
+        print(f"score_b 연산 평균 시간 (10회): {average_time_b} ms, N²:{number*number}")
     except ValueError as e:
         print("ERROR:", e)
 
@@ -149,11 +147,11 @@ def mode1():
         result = compare_scores(score_a, score_b)
 
         if result == "UNDECIDED":
-            print("두 필터의 점수가 같습니다.")
+            print("판정 불가: 두 필터의 점수가 같습니다.")
         elif result == "A":
-            print("A 필터의 점수가 더 높습니다.")
+            print("판정: A")
         else:
-            print("B 필터의 점수가 더 높습니다.")
+            print("판정: B")
 
 
 # 모드 2: JSON 파일 사용
@@ -230,32 +228,33 @@ def mode2():
     
             print(f"size: {size}×{size}")
             print("예상:", expected)
-            print(f"연산 평균 시간 (10회): Cross={average_time_cross:.6f}ms, X={average_time_x:.6f}ms")
+            print(f"연산 평균 시간 (N²{size*size}): Cross={average_time_cross:.6f}ms, X={average_time_x:.6f}ms")
             print(f"점수: Cross={score_cross}, X={score_x}")
             print("판정:", result)
-            print("결과:", status)
+            reason = ''
+            if status == 'FAIL':
+                reason = '(동점규칙)'
+            print("결과:", status, reason)
             print("--------------------")
 
         except ValueError as e:
                     print("ERROR:", e)
+
+    ## 성능 분석 출력
+    print("\n[성능 분석]")
+    print("크기\t평균 시간(ms)\t연산 횟수(N²)")
+    for size, times in sorted(performance.items()):
+        average_time = sum(times) / len(times)
+        operations = size ** 2
     
+        print(f"{size}×{size}\t{average_time:.6f}\t{operations}")
 
     ## 결과 출력
-    print("[total]")
+    print("\n[total]")
     print("전체 패턴 수:", total_count)
     print("PASS:", pass_count)
     print("FAIL:", fail_count)
 
-
-    ## 성능 분석 표
-    print("\n[성능 분석]")
-    print("크기\t평균 시간(ms)\t연산 횟수(N²)")
-
-    for size, times in sorted(performance.items()):
-        average_time = sum(times) / len(times)
-        operations = size ** 2
-
-        print(f"{size}×{size}\t{average_time:.6f}\t{operations}")
 
 ### 메인 실행 부분 ###
 mode = input("모드를 선택하세요 (1 또는 2): ")
